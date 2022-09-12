@@ -14,13 +14,20 @@ export class TarefaService {
 
     async findAll(): Promise<Tarefa[]> {
         //Retornando todos os dados da tabela tarefa
-        return this.tarefaRepository.find()
+        return this.tarefaRepository.find({
+            relations: {
+                categoria: true
+            }
+        })
     }
 
     async findById(id: number): Promise<Tarefa> {
         let tarefa = await this.tarefaRepository.findOne({
             where: {
                 id
+            },
+            relations: {
+                categoria: true
             }
         })
 
@@ -36,6 +43,9 @@ export class TarefaService {
             where: {
                 //ILike = encontra todas as ocorrências, sendo case insensitive. Sem o I seria case sensitive
                 nome: ILike(`%${nome}%`)
+            },
+            relations: {
+                categoria: true
             }
         })
     }
