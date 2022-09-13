@@ -13,7 +13,7 @@ import { ProdutoModule } from "src/produto/modules/produto.module";
     host: 'localhost',
     port: 3306,
     username: 'root', 
-    password: '12345',
+    password: 'root',
     database: 'db_farmacia',
     entities: [Produto, Categoria],
     synchronize: true
