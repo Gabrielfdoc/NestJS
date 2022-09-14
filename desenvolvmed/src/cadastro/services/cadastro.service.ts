@@ -20,18 +20,18 @@ export class CadastroService {
         private pacienteRepository: Repository<Paciente>
     ) { }
 
-    async createMedico(cadastroTemporarioDTODTO: CadastroTemporarioDTO): Promise<Medico> {
+    async createMedico(cadastroTemporarioDTO: CadastroTemporarioDTO): Promise<Medico> {
 
         let cadastro: Cadastro = new Cadastro()
         let medico: Medico = new Medico()
 
-        cadastro.email = cadastroTemporarioDTODTO.email
-        cadastro.nome = cadastroTemporarioDTODTO.nome
-        cadastro.cpf = cadastroTemporarioDTODTO.cpf
-        cadastro.sobrenome = cadastroTemporarioDTODTO.sobrenome
-        cadastro.senha = cadastroTemporarioDTODTO.senha
+        cadastro.email = cadastroTemporarioDTO.email
+        cadastro.nome = cadastroTemporarioDTO.nome
+        cadastro.cpf = cadastroTemporarioDTO.cpf
+        cadastro.sobrenome = cadastroTemporarioDTO.sobrenome
+        cadastro.senha = cadastroTemporarioDTO.senha
 
-        medico.crm = cadastroTemporarioDTODTO.crm
+        medico.crm = cadastroTemporarioDTO.crm
 
         let novoCadastro = await this.cadastroRepository.save(cadastro)
 
