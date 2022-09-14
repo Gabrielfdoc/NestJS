@@ -28,7 +28,7 @@ export class Produto {
     laboratorio: string
 
     @IsNotEmpty()
-    @Column({nullable: false})
+    @Column({nullable: false, type: "decimal", precision: 10, scale: 2})
     preco: number
 
     @IsNotEmpty()

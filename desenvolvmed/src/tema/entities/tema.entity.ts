@@ -11,7 +11,7 @@ export class Tema {
 
     @IsNotEmpty()
     @MaxLength(255)
-    @Column({nullable: false, length: 255})
+    @Column({ nullable: false, length: 255 })
     tema: string
 
     @OneToMany(() => Postagem, (postagem) => postagem.tema)

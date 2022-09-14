@@ -1,9 +1,8 @@
+import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
 import { IsNotEmpty, MaxLength } from "class-validator";
-import { Comentario } from "src/comentario/entities/comentario.entity";
-import { Column, Entity, PrimaryGeneratedColumn, OneToMany } from "typeorm";
 
-@Entity('tb_cadastros')
-export class Cadastro {
+@Entity('tb_cadastro_temp')
+export class CadastroTemp {
 
     @PrimaryGeneratedColumn()
     id: number
@@ -33,6 +32,11 @@ export class Cadastro {
     @Column({ nullable: false, length: 255 })
     email: string
 
-    @OneToMany(() => Comentario, (comentarioRealizado) => comentarioRealizado.cadastro)
-    comentarios: Comentario[]
+    @MaxLength(8)
+    @Column({ nullable: true, length: 8 })
+    crm: string
+
+    @MaxLength(50)
+    @Column({ nullable: true, length: 50 })
+    convenio: string
 }
