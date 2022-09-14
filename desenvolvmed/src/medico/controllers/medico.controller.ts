@@ -17,8 +17,8 @@ export class MedicoController {
 
     @Get('/:id')
     @HttpCode(HttpStatus.OK)
-    findById(@Param('id', ParseIntPipe) id: number): Promise<Medico[]> {
-        return this.service.findAll()
+    findById(@Param('id', ParseIntPipe) id: number): Promise<Medico> {
+        return this.service.findById(id)
     }
 }
 

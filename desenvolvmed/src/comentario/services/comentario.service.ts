@@ -2,6 +2,11 @@ import { HttpException, HttpStatus, Injectable } from "@nestjs/common";
 import { DeleteResult, Repository } from "typeorm";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Comentario } from "../entities/comentario.entity";
+import { Cadastro } from "src/cadastro/entities/cadastro.entity";
+import { Postagem } from "src/postagem/entities/postagem.entity";
+import { ComentarioDTO } from "../models/comentarioDTO";
+import { PostagemDTO } from "src/postagem/models/postagemDTO";
+import { serialize } from "class-transformer";
 
 @Injectable()
 export class ComentarioService {
@@ -57,7 +62,7 @@ export class ComentarioService {
 
     async update(comentario: Comentario): Promise<Comentario> {
 
-        let comentarioUpdate = await this.findById(comentario.id)
+        const comentarioUpdate = await this.findById(comentario.id)
 
         if (!comentarioUpdate || !comentario.id) {
             throw new HttpException('Comentário não encontrado!', HttpStatus.NOT_FOUND)
@@ -65,4 +70,25 @@ export class ComentarioService {
 
         return this.comentarioRepository.save(comentario)
     }
+
+    private dtoToEntityMapper(comentarioDTO: ComentarioDTO) : Comentario {
+        const comentario = new Comentario()
+        const postagem = new Postagem()
+        const cadastro = new Cadastro()
+
+        postagem.id = comentarioDTO.postagem
+        cadastro.id = comentarioDTO.cadastro
+
+        comentario.id = comentarioDTO.id
+        comentario.cadastro = cadastro
+        comentario.postagem = postagem
+        comentario.conteudo = comentarioDTO.conteudo
+        console.log(comentarioDTO.dataComentario)
+        comentario.dataComentario = comentarioDTO.dataComentario
+
+        console.log(comentario)
+
+        return comentario
+    }
+
 }

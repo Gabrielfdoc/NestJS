@@ -1,5 +1,5 @@
 import { Body, Controller, Delete, Get, HttpCode, HttpStatus, Param, ParseIntPipe, Post, Put } from "@nestjs/common";
-import { CadastroTemp } from "src/cadastrotemp/entities/cadastroTemp.entity";
+import { CadastroTemporarioDTO } from "src/cadastro/model/cadastrotemporariodto";
 import { Medico } from "src/medico/entities/medico.entity";
 import { Paciente } from "src/paciente/entities/paciente.entity";
 import { CadastroService } from "../services/cadastro.service";
@@ -15,14 +15,14 @@ export class CadastroController {
 
     @Post('/medico')
     @HttpCode(HttpStatus.CREATED)
-    createMedico(@Body() cadastroTemporario: CadastroTemp): Promise<Medico> {
-        return this.service.createMedico(cadastroTemporario)
+    createMedico(@Body() cadastroTemporarioDTO: CadastroTemporarioDTO): Promise<Medico> {
+        return this.service.createMedico(cadastroTemporarioDTO)
     }
 
     @Post('/paciente')
     @HttpCode(HttpStatus.CREATED)
-    createPaciente(@Body() cadastroTemporario: CadastroTemp): Promise<Paciente> {
-        return this.service.createPaciente(cadastroTemporario)
+    createPaciente(@Body() cadastroTemporarioDTO: CadastroTemporarioDTO): Promise<Paciente> {
+        return this.service.createPaciente(cadastroTemporarioDTO)
     }
 
     @Delete('/:id')
@@ -39,13 +39,13 @@ export class CadastroController {
 
     @Put('/medico')
     @HttpCode(HttpStatus.OK)
-    updateMedico(@Body() cadastroTemporario: CadastroTemp): Promise<Medico> {
-        return this.service.updateMedico(cadastroTemporario)
+    updateMedico(@Body() cadastroTemporarioDTO: CadastroTemporarioDTO): Promise<Medico> {
+        return this.service.updateMedico(cadastroTemporarioDTO)
     }
 
     @Put('/paciente')
     @HttpCode(HttpStatus.OK)
-    updatePaciente(@Body() cadastroTemporario: CadastroTemp): Promise<Paciente> {
-        return this.service.updatePaciente(cadastroTemporario)
+    updatePaciente(@Body() cadastroTemporarioDTO: CadastroTemporarioDTO): Promise<Paciente> {
+        return this.service.updatePaciente(cadastroTemporarioDTO)
     }
 }

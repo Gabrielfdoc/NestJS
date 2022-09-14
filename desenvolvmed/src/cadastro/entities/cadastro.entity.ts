@@ -10,7 +10,7 @@ export class Cadastro {
 
     @IsNotEmpty()
     @MaxLength(255)
-    @Column({ nullable: false, length: 255 })
+    @Column({ nullable: false, unique: true, length: 255 })
     cpf: string
 
     @IsNotEmpty()
@@ -30,7 +30,7 @@ export class Cadastro {
 
     @IsNotEmpty()
     @MaxLength(255)
-    @Column({ nullable: false, length: 255 })
+    @Column({ nullable: false, unique: true ,length: 255 })
     email: string
 
     @OneToMany(() => Comentario, (comentarioRealizado) => comentarioRealizado.cadastro)

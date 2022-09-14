@@ -1,6 +1,6 @@
 import { HttpException, HttpStatus, Injectable } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
-import { CadastroTemp } from "src/cadastrotemp/entities/cadastroTemp.entity";
+import { CadastroTemporarioDTO } from "src/cadastro/model/cadastrotemporariodto";
 import { Medico } from "src/medico/entities/medico.entity";
 import { Paciente } from "src/paciente/entities/paciente.entity";
 import { Cadastro } from "../entities/cadastro.entity";
@@ -20,18 +20,18 @@ export class CadastroService {
         private pacienteRepository: Repository<Paciente>
     ) { }
 
-    async createMedico(cadastroTemporario: CadastroTemp): Promise<Medico> {
+    async createMedico(cadastroTemporarioDTODTO: CadastroTemporarioDTO): Promise<Medico> {
 
         let cadastro: Cadastro = new Cadastro()
         let medico: Medico = new Medico()
 
-        cadastro.email = cadastroTemporario.email
-        cadastro.nome = cadastroTemporario.nome
-        cadastro.cpf = cadastroTemporario.cpf
-        cadastro.sobrenome = cadastroTemporario.sobrenome
-        cadastro.senha = cadastroTemporario.senha
+        cadastro.email = cadastroTemporarioDTODTO.email
+        cadastro.nome = cadastroTemporarioDTODTO.nome
+        cadastro.cpf = cadastroTemporarioDTODTO.cpf
+        cadastro.sobrenome = cadastroTemporarioDTODTO.sobrenome
+        cadastro.senha = cadastroTemporarioDTODTO.senha
 
-        medico.crm = cadastroTemporario.crm
+        medico.crm = cadastroTemporarioDTODTO.crm
 
         let novoCadastro = await this.cadastroRepository.save(cadastro)
 
@@ -40,18 +40,18 @@ export class CadastroService {
         return this.medicoRepository.save(medico)
     }
 
-    async createPaciente(cadastroTemporario: CadastroTemp): Promise<Paciente> {
+    async createPaciente(cadastroTemporarioDTO: CadastroTemporarioDTO): Promise<Paciente> {
 
         let cadastro: Cadastro = new Cadastro()
         let paciente: Paciente = new Paciente()
 
-        cadastro.email = cadastroTemporario.email
-        cadastro.nome = cadastroTemporario.nome
-        cadastro.cpf = cadastroTemporario.cpf
-        cadastro.sobrenome = cadastroTemporario.sobrenome
-        cadastro.senha = cadastroTemporario.senha
+        cadastro.email = cadastroTemporarioDTO.email
+        cadastro.nome = cadastroTemporarioDTO.nome
+        cadastro.cpf = cadastroTemporarioDTO.cpf
+        cadastro.sobrenome = cadastroTemporarioDTO.sobrenome
+        cadastro.senha = cadastroTemporarioDTO.senha
 
-        paciente.convenio = cadastroTemporario.convenio
+        paciente.convenio = cadastroTemporarioDTO.convenio
 
         let novoCadastro = await this.cadastroRepository.save(cadastro)
 
@@ -86,6 +86,40 @@ export class CadastroService {
         return cadastroProcurado
     }
 
+    async findPacienteById(id: number): Promise<Paciente> {
+
+        const cadastroProcurado = this.pacienteRepository.findOne({
+            where: {
+                id
+            }, relations: {
+                cadastro: true
+            }
+        })
+
+        if (!cadastroProcurado) {
+            throw new HttpException('Cadastro não encontrado!', HttpStatus.NOT_FOUND)
+        }
+
+        return cadastroProcurado
+    }
+
+    async findMedicoByCrm(crm: string): Promise<Medico> {
+
+        const cadastroProcurado = this.medicoRepository.findOne({
+            where: {
+                crm
+            }, relations: {
+                cadastro: true
+            }
+        })
+
+        if (!cadastroProcurado) {
+            throw new HttpException('Cadastro não encontrado!', HttpStatus.NOT_FOUND)
+        }
+
+        return cadastroProcurado
+    }
+
     async delete(id: number): Promise<DeleteResult> {
 
         let cadastroDeletar = this.findById(id)
@@ -97,32 +131,26 @@ export class CadastroService {
         return this.cadastroRepository.delete(id)
     }
 
-    async updateMedico(cadastroTemporario: CadastroTemp): Promise<Medico> {
+    async updateMedico(cadastroTemporarioDTO: CadastroTemporarioDTO): Promise<Medico> {
 
-        let cadastroMedicoUpdate = await this.findById(cadastroTemporario.id)
+        let medicoUpdate = await this.findMedicoByCrm(cadastroTemporarioDTO.crm)
 
-        if (!cadastroMedicoUpdate || !cadastroTemporario.id) {
+        if (!medicoUpdate || !cadastroTemporarioDTO.id) {
             throw new HttpException('Médico não encontrado!', HttpStatus.NOT_FOUND)
         }
 
         let cadastro: Cadastro = new Cadastro()
         let medico: Medico = new Medico()
 
-        cadastro.id = cadastroTemporario.id
-        cadastro.email = cadastroTemporario.email
-        cadastro.nome = cadastroTemporario.nome
-        cadastro.cpf = cadastroTemporario.cpf
-        cadastro.sobrenome = cadastroTemporario.sobrenome
-        cadastro.senha = cadastroTemporario.senha
-
-        let medicoUpdate = await this.medicoRepository.findOne({
-            where: {
-                crm: ILike(`${cadastroTemporario.crm}`)
-            }
-        })
+        cadastro.id = medicoUpdate.cadastro.id
+        cadastro.email = cadastroTemporarioDTO.email
+        cadastro.nome = cadastroTemporarioDTO.nome
+        cadastro.cpf = cadastroTemporarioDTO.cpf
+        cadastro.sobrenome = cadastroTemporarioDTO.sobrenome
+        cadastro.senha = cadastroTemporarioDTO.senha
 
         medico.id = medicoUpdate.id
-        medico.crm = cadastroTemporario.crm
+        medico.crm = cadastroTemporarioDTO.crm
 
         let novoCadastro = await this.cadastroRepository.save(cadastro)
 
@@ -132,38 +160,33 @@ export class CadastroService {
 
     }
 
-    async updatePaciente(cadastroTemporario: CadastroTemp): Promise<Paciente> {
+    async updatePaciente(cadastroTemporarioDTO: CadastroTemporarioDTO): Promise<Paciente> {
 
-        let cadastroPacienteUpdate = await this.findById(cadastroTemporario.id)
+        const pacienteUpdate = await this.findPacienteById(cadastroTemporarioDTO.id)
 
-        if (!cadastroPacienteUpdate || !cadastroTemporario.id) {
+        if (!pacienteUpdate || !cadastroTemporarioDTO.id) {
             throw new HttpException('Paciente não encontrado!', HttpStatus.NOT_FOUND)
         }
 
         let cadastro: Cadastro = new Cadastro()
         let paciente: Paciente = new Paciente()
 
-        cadastro.id = cadastroTemporario.id
-        cadastro.email = cadastroTemporario.email
-        cadastro.nome = cadastroTemporario.nome
-        cadastro.cpf = cadastroTemporario.cpf
-        cadastro.sobrenome = cadastroTemporario.sobrenome
-        cadastro.senha = cadastroTemporario.senha
+        cadastro.id = pacienteUpdate.cadastro.id
+        cadastro.email = cadastroTemporarioDTO.email
+        cadastro.nome = cadastroTemporarioDTO.nome
+        cadastro.cpf = cadastroTemporarioDTO.cpf
+        cadastro.sobrenome = cadastroTemporarioDTO.sobrenome
+        cadastro.senha = cadastroTemporarioDTO.senha
 
-        let pacienteUpdate = await this.pacienteRepository.findOne({
-            where: {
-                id: cadastro.id = cadastroTemporario.id
-            }
-        })
+        paciente.id = cadastroTemporarioDTO.id
+        paciente.convenio = cadastroTemporarioDTO.convenio
 
-        paciente.id = pacienteUpdate.id
-        paciente.convenio = cadastroTemporario.convenio
-
-        let novoCadastro = await this.cadastroRepository.save(cadastro)
+        const novoCadastro = await this.cadastroRepository.save(cadastro)
 
         paciente.cadastro = novoCadastro
 
         return this.pacienteRepository.save(paciente)
+
     }
 
     async findByName(nome: string): Promise<Cadastro[]> {
