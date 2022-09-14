@@ -7,7 +7,7 @@ export class PacienteController {
 
     constructor(
         private readonly service: PacienteService
-    ) { }
+    ) {}
 
     @Get()
     @HttpCode(HttpStatus.OK)
