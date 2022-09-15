@@ -1,4 +1,3 @@
-
 import { InjectRepository } from "@nestjs/typeorm";
 import { Medico } from "../entities/medico.entity";
 import { HttpException, HttpStatus, Injectable } from "@nestjs/common";

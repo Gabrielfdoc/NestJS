@@ -1,4 +1,4 @@
-import { IsNotEmpty, MaxLength } from "class-validator";
+import { IsNotEmpty, MaxLength, MinLength } from "class-validator";
 import { Expose } from "class-transformer";
 import { ClassSerializerInterceptor, UseInterceptors } from "@nestjs/common";
 
@@ -10,6 +10,7 @@ export class ComentarioDTO {
 
     @IsNotEmpty()
     @MaxLength(300)
+    @MinLength(10)
     @Expose({name: "conteudo"})
     conteudo: string
 

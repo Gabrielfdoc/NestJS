@@ -1,10 +1,10 @@
 import { Body, Controller, Delete, Get, HttpCode, HttpStatus, Param, ParseIntPipe, Post, Put } from "@nestjs/common";
-import { CadastroTemporarioDTO } from "src/cadastro/model/cadastrotemporariodto";
-import { Medico } from "src/medico/entities/medico.entity";
-import { Paciente } from "src/paciente/entities/paciente.entity";
 import { CadastroService } from "../services/cadastro.service";
 import { DeleteResult } from "typeorm";
 import { Cadastro } from "../entities/cadastro.entity";
+import { Paciente } from "../../paciente/entities/paciente.entity";
+import { Medico } from "../../medico/entities/medico.entity";
+import { CadastroTemporarioDTO } from "../model/cadastrotemporariodto";
 
 @Controller('/cadastro')
 export class CadastroController {

@@ -1,11 +1,11 @@
-import { IsNotEmpty, MaxLength } from "class-validator";
+import { IsNotEmpty, Length, MaxLength, MinLength } from "class-validator";
 
 export class CadastroTemporarioDTO {
 
     id: number
 
     @IsNotEmpty()
-    @MaxLength(11)
+    @Length(11)
     cpf: string
 
     @IsNotEmpty()
@@ -24,7 +24,7 @@ export class CadastroTemporarioDTO {
     @MaxLength(255)
     email: string
 
-    @MaxLength(8)
+    @Length(13)
     crm: string
 
     @MaxLength(50)

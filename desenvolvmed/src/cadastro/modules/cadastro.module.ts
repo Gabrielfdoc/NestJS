@@ -1,7 +1,7 @@
 import { Module } from "@nestjs/common";
 import { TypeOrmModule } from "@nestjs/typeorm";
-import { Medico } from "src/medico/entities/medico.entity";
-import { Paciente } from "src/paciente/entities/paciente.entity";
+import { Medico } from "../../medico/entities/medico.entity";
+import { Paciente } from "../../paciente/entities/paciente.entity";
 import { CadastroController } from "../controllers/cadastro.controller";
 import { Cadastro } from "../entities/cadastro.entity";
 import { CadastroService } from "../services/cadastro.service";

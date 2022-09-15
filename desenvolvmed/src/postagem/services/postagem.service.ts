@@ -39,16 +39,24 @@ export class PostagemService {
 
     async findByTitle(titulo: string): Promise<Postagem[]> {
 
-        return this.postagemRepository.find({
+        let postagem = this.postagemRepository.find({
             where: {
                 titulo: ILike(`%${titulo}%`)
             }, relations: {
                 tema: true
             }
         })
+
+        if (!titulo)
+        throw new HttpException('Postagem não encontrada!', HttpStatus.NOT_FOUND)
+
+        return postagem
     }
 
     async create(postagem: Postagem): Promise<Postagem> {
+
+        if (!postagem.descricao || !postagem.titulo)
+            throw new HttpException('Postagem inválida!', HttpStatus.NOT_ACCEPTABLE)
 
         return this.postagemRepository.save(postagem)
     }
@@ -56,7 +64,7 @@ export class PostagemService {
     async update(postagem: Postagem): Promise<Postagem> {
 
         let postagemUpdate = await this.findById(postagem.id)
-
+        
         if (!postagemUpdate)
             throw new HttpException('Postagem não encontrada!', HttpStatus.NOT_FOUND)
 

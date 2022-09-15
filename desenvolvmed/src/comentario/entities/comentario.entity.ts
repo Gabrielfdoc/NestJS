@@ -1,7 +1,8 @@
-import { IsNotEmpty, MaxLength } from "class-validator";
-import { Cadastro } from "src/cadastro/entities/cadastro.entity";
-import { Postagem } from "src/postagem/entities/postagem.entity";
+import { IsNotEmpty, MaxLength, MinLength } from "class-validator";
+
 import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
+import { Cadastro } from "../../cadastro/entities/cadastro.entity";
+import { Postagem } from "../../postagem/entities/postagem.entity";
 
 
 @Entity('tb_comentarios')
@@ -12,6 +13,7 @@ export class Comentario {
 
     @IsNotEmpty()
     @MaxLength(300)
+    @MinLength(10)
     @Column({ nullable: false, length: 300 })
     conteudo: string
 

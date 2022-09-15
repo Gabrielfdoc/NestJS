@@ -23,4 +23,5 @@ import { TarefaModule } from './tarefa/modules/tarefa.module';
   controllers: [],
   providers: [],
 })
+
 export class AppModule {}

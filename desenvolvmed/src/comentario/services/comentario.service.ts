@@ -18,6 +18,10 @@ export class ComentarioService {
 
     async create(comentario: Comentario): Promise<Comentario> {
 
+        if(!comentario.conteudo) {
+            throw new HttpException('Comentário Invalido!', HttpStatus.NOT_ACCEPTABLE)
+        }
+
         return this.comentarioRepository.save(comentario)
     }
 
@@ -71,24 +75,23 @@ export class ComentarioService {
         return this.comentarioRepository.save(comentario)
     }
 
-    private dtoToEntityMapper(comentarioDTO: ComentarioDTO) : Comentario {
-        const comentario = new Comentario()
-        const postagem = new Postagem()
-        const cadastro = new Cadastro()
+    // private dtoToEntityMapper(comentarioDTO: ComentarioDTO) : Comentario {
+    //     const comentario = new Comentario()
+    //     const postagem = new Postagem()
+    //     const cadastro = new Cadastro()
 
-        postagem.id = comentarioDTO.postagem
-        cadastro.id = comentarioDTO.cadastro
+    //     postagem.id = comentarioDTO.postagem
+    //     cadastro.id = comentarioDTO.cadastro
 
-        comentario.id = comentarioDTO.id
-        comentario.cadastro = cadastro
-        comentario.postagem = postagem
-        comentario.conteudo = comentarioDTO.conteudo
-        console.log(comentarioDTO.dataComentario)
-        comentario.dataComentario = comentarioDTO.dataComentario
+    //     comentario.id = comentarioDTO.id
+    //     comentario.cadastro = cadastro
+    //     comentario.postagem = postagem
+    //     comentario.conteudo = comentarioDTO.conteudo
+    //     console.log(comentarioDTO.dataComentario)
+    //     comentario.dataComentario = comentarioDTO.dataComentario
 
-        console.log(comentario)
+    //     console.log(comentario)
 
-        return comentario
-    }
-
+    //     return comentario
+    // }
 }

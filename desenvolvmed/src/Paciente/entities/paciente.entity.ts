@@ -1,6 +1,6 @@
 import { MaxLength } from "class-validator";
-import { Cadastro } from "src/cadastro/entities/cadastro.entity";
 import { Column, Entity, OneToOne, JoinColumn, PrimaryGeneratedColumn } from "typeorm";
+import { Cadastro } from "../../cadastro/entities/cadastro.entity";
 
 
 @Entity('tb_pacientes')

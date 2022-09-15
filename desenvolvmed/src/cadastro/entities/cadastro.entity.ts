@@ -1,6 +1,6 @@
-import { IsNotEmpty, MaxLength } from "class-validator";
-import { Comentario } from "src/comentario/entities/comentario.entity";
+import { IsNotEmpty, MaxLength, Length, MinLength  } from "class-validator";
 import { Column, Entity, PrimaryGeneratedColumn, OneToMany } from "typeorm";
+import { Comentario } from "../../comentario/entities/comentario.entity";
 
 @Entity('tb_cadastros')
 export class Cadastro {
@@ -9,8 +9,8 @@ export class Cadastro {
     id: number
 
     @IsNotEmpty()
-    @MaxLength(255)
-    @Column({ nullable: false, unique: true, length: 255 })
+    @Length(11)
+    @Column({ nullable: false, unique: true, length: 11 })
     cpf: string
 
     @IsNotEmpty()
@@ -25,6 +25,7 @@ export class Cadastro {
 
     @IsNotEmpty()
     @MaxLength(255)
+    @MinLength(4)
     @Column({ nullable: false, length: 255 })
     senha: string
 

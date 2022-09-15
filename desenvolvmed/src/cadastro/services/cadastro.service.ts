@@ -1,8 +1,8 @@
 import { HttpException, HttpStatus, Injectable } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
-import { CadastroTemporarioDTO } from "src/cadastro/model/cadastrotemporariodto";
-import { Medico } from "src/medico/entities/medico.entity";
-import { Paciente } from "src/paciente/entities/paciente.entity";
+import { CadastroTemporarioDTO } from "../model/cadastrotemporariodto";
+import { Medico } from "../../medico/entities/medico.entity";
+import { Paciente } from "../../paciente/entities/paciente.entity";
 import { Cadastro } from "../entities/cadastro.entity";
 import { DeleteResult, ILike, Repository } from "typeorm";
 
@@ -20,7 +20,14 @@ export class CadastroService {
         private pacienteRepository: Repository<Paciente>
     ) { }
 
+
     async createMedico(cadastroTemporarioDTO: CadastroTemporarioDTO): Promise<Medico> {
+
+        if (!cadastroTemporarioDTO.crm || !Number(cadastroTemporarioDTO.cpf)) {
+            throw new HttpException('Dados inválidos!', HttpStatus.NOT_ACCEPTABLE)
+        } else if (!cadastroTemporarioDTO.email || !cadastroTemporarioDTO.email.includes("@")) {
+            throw new HttpException('E-mail já cadastrado ou inválido!', HttpStatus.NOT_ACCEPTABLE)
+        }
 
         let cadastro: Cadastro = new Cadastro()
         let medico: Medico = new Medico()
@@ -41,6 +48,12 @@ export class CadastroService {
     }
 
     async createPaciente(cadastroTemporarioDTO: CadastroTemporarioDTO): Promise<Paciente> {
+
+        if (!Number(cadastroTemporarioDTO.cpf)) {
+            throw new HttpException('CPF inválido!', HttpStatus.NOT_ACCEPTABLE)
+        } else if (!cadastroTemporarioDTO.email || !cadastroTemporarioDTO.email.includes("@")) {
+            throw new HttpException('E-mail já cadastrado!', HttpStatus.NOT_ACCEPTABLE)
+        }
 
         let cadastro: Cadastro = new Cadastro()
         let paciente: Paciente = new Paciente()
@@ -137,6 +150,10 @@ export class CadastroService {
 
         if (!medicoUpdate || !cadastroTemporarioDTO.id) {
             throw new HttpException('Médico não encontrado!', HttpStatus.NOT_FOUND)
+        } else if (!Number(cadastroTemporarioDTO.cpf)) {
+            throw new HttpException('CPF inválido!', HttpStatus.NOT_ACCEPTABLE)
+        } else if (!cadastroTemporarioDTO.email || !cadastroTemporarioDTO.email.includes("@")) {
+            throw new HttpException('E-mail já cadastrado!', HttpStatus.NOT_ACCEPTABLE)
         }
 
         let cadastro: Cadastro = new Cadastro()
@@ -157,7 +174,6 @@ export class CadastroService {
         medico.cadastro = novoCadastro
 
         return this.medicoRepository.save(medico)
-
     }
 
     async updatePaciente(cadastroTemporarioDTO: CadastroTemporarioDTO): Promise<Paciente> {
@@ -166,6 +182,10 @@ export class CadastroService {
 
         if (!pacienteUpdate || !cadastroTemporarioDTO.id) {
             throw new HttpException('Paciente não encontrado!', HttpStatus.NOT_FOUND)
+        } else if (!Number(cadastroTemporarioDTO.cpf)) {
+            throw new HttpException('CPF inválido!', HttpStatus.NOT_ACCEPTABLE)
+        } else if (!cadastroTemporarioDTO.email || !cadastroTemporarioDTO.email.includes("@")) {
+            throw new HttpException('E-mail já cadastrado!', HttpStatus.NOT_ACCEPTABLE)
         }
 
         let cadastro: Cadastro = new Cadastro()
@@ -186,7 +206,6 @@ export class CadastroService {
         paciente.cadastro = novoCadastro
 
         return this.pacienteRepository.save(paciente)
-
     }
 
     async findByName(nome: string): Promise<Cadastro[]> {

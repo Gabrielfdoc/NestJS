@@ -1,7 +1,7 @@
-import { IsNotEmpty, MaxLength } from "class-validator";
-import { Cadastro } from "src/cadastro/entities/cadastro.entity";
-import { Postagem } from "src/postagem/entities/postagem.entity";
+import { IsNotEmpty, Length } from "class-validator";
 import { Column, Entity, OneToMany, OneToOne, JoinColumn, PrimaryGeneratedColumn } from "typeorm";
+import { Cadastro } from "../../cadastro/entities/cadastro.entity";
+import { Postagem } from "../../postagem/entities/postagem.entity";
 
 @Entity('tb_medicos')
 export class Medico {
@@ -10,8 +10,8 @@ export class Medico {
     id: number
 
     @IsNotEmpty()
-    @MaxLength(8)
-    @Column({ nullable: false, unique: true, length: 8 })
+    @Length(13)
+    @Column({ nullable: false, unique: true, length: 13 })
     crm: string
 
     @OneToMany(() => Postagem, (postagem) => postagem.medico)
