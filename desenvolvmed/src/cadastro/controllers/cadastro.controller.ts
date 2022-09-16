@@ -4,7 +4,9 @@ import { DeleteResult } from "typeorm";
 import { Cadastro } from "../entities/cadastro.entity";
 import { Paciente } from "../../paciente/entities/paciente.entity";
 import { Medico } from "../../medico/entities/medico.entity";
-import { CadastroTemporarioDTO } from "../model/cadastrotemporariodto";
+import { CadastroTemporarioMedicoDTO } from "../model/cadastrotemporariomedicodto";
+import { CadastroTemporarioPacienteDTO } from "../model/cadastrotemporariopacientedto";
+
 
 @Controller('/cadastro')
 export class CadastroController {
@@ -15,14 +17,14 @@ export class CadastroController {
 
     @Post('/medico')
     @HttpCode(HttpStatus.CREATED)
-    createMedico(@Body() cadastroTemporarioDTO: CadastroTemporarioDTO): Promise<Medico> {
-        return this.service.createMedico(cadastroTemporarioDTO)
+    createMedico(@Body() cadastroTemporarioMedicoDTO: CadastroTemporarioMedicoDTO): Promise<Medico> {
+        return this.service.createMedico(cadastroTemporarioMedicoDTO)
     }
 
     @Post('/paciente')
     @HttpCode(HttpStatus.CREATED)
-    createPaciente(@Body() cadastroTemporarioDTO: CadastroTemporarioDTO): Promise<Paciente> {
-        return this.service.createPaciente(cadastroTemporarioDTO)
+    createPaciente(@Body() cadastroTemporarioPacienteDTO: CadastroTemporarioPacienteDTO): Promise<Paciente> {
+        return this.service.createPaciente(cadastroTemporarioPacienteDTO)
     }
 
     @Delete('/:id')
@@ -39,13 +41,13 @@ export class CadastroController {
 
     @Put('/medico')
     @HttpCode(HttpStatus.OK)
-    updateMedico(@Body() cadastroTemporarioDTO: CadastroTemporarioDTO): Promise<Medico> {
-        return this.service.updateMedico(cadastroTemporarioDTO)
+    updateMedico(@Body() cadastroTemporarioMedicoDTO: CadastroTemporarioMedicoDTO): Promise<Medico> {
+        return this.service.updateMedico(cadastroTemporarioMedicoDTO)
     }
 
     @Put('/paciente')
     @HttpCode(HttpStatus.OK)
-    updatePaciente(@Body() cadastroTemporarioDTO: CadastroTemporarioDTO): Promise<Paciente> {
-        return this.service.updatePaciente(cadastroTemporarioDTO)
+    updatePaciente(@Body() cadastroTemporarioPacienteDTO: CadastroTemporarioPacienteDTO): Promise<Paciente> {
+        return this.service.updatePaciente(cadastroTemporarioPacienteDTO)
     }
 }

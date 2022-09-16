@@ -5,7 +5,7 @@ import { AppModule } from './../src/app.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 
 describe('Testando requisições da API utilizada no app DesenvolvMED', () => {
-  let app: INestApplication;
+  let app: INestApplication
 
   jest.setTimeout(50000)
   beforeAll(async () => {
@@ -25,11 +25,11 @@ describe('Testando requisições da API utilizada no app DesenvolvMED', () => {
         }),
         AppModule
       ],
-    }).compile();
+    }).compile()
 
-    app = moduleFixture.createNestApplication();
-    await app.init();
-  });
+    app = moduleFixture.createNestApplication()
+    await app.init()
+  })
 
   let temaId: number
 
@@ -43,7 +43,7 @@ describe('Testando requisições da API utilizada no app DesenvolvMED', () => {
       .expect(201)
 
     temaId = response.body.id
-  });
+  })
 
   it('02 - Procurar o tema por id', async () => {
     return request(app.getHttpServer())
@@ -62,7 +62,7 @@ describe('Testando requisições da API utilizada no app DesenvolvMED', () => {
       .then(response => {
         expect("Epidemia").toEqual(response.body.tema)
         expect("Epidemias").not.toBe(response.body.tema)
-      });
+      })
   })
 
   it('04 - Deve retornar todos os temas no banco', async () => {
@@ -307,7 +307,7 @@ describe('Testando requisições da API utilizada no app DesenvolvMED', () => {
       .expect(200)
       .then(response => {
         expect("Adorei o post doutor, muito informativo!").toEqual(response.body.conteudo)
-      });
+      })
   })
 
   it('23 - Deverá deletar um post', async () => {
@@ -334,4 +334,4 @@ describe('Testando requisições da API utilizada no app DesenvolvMED', () => {
       .delete('/cadastro/' + idCadastroGeral)
       .expect(204)
   })
-});
+})

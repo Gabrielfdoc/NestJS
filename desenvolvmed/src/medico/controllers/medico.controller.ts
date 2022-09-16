@@ -21,4 +21,3 @@ export class MedicoController {
         return this.service.findById(id)
     }
 }
-

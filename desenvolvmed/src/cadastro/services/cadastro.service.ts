@@ -1,10 +1,12 @@
 import { HttpException, HttpStatus, Injectable } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
-import { CadastroTemporarioDTO } from "../model/cadastrotemporariodto";
+import { CadastroTemporarioMedicoDTO } from "../model/cadastrotemporariomedicodto";
+import { CadastroTemporarioPacienteDTO } from "../model/cadastrotemporariopacientedto";
 import { Medico } from "../../medico/entities/medico.entity";
 import { Paciente } from "../../paciente/entities/paciente.entity";
 import { Cadastro } from "../entities/cadastro.entity";
 import { DeleteResult, ILike, Repository } from "typeorm";
+import { matches } from "class-validator";
 
 @Injectable()
 export class CadastroService {
@@ -21,24 +23,24 @@ export class CadastroService {
     ) { }
 
 
-    async createMedico(cadastroTemporarioDTO: CadastroTemporarioDTO): Promise<Medico> {
+    async createMedico(cadastroTemporarioMedicoDTO: CadastroTemporarioMedicoDTO): Promise<Medico> {
 
-        if (!cadastroTemporarioDTO.crm || !Number(cadastroTemporarioDTO.cpf)) {
-            throw new HttpException('Dados inválidos!', HttpStatus.NOT_ACCEPTABLE)
-        } else if (!cadastroTemporarioDTO.email || !cadastroTemporarioDTO.email.includes("@")) {
-            throw new HttpException('E-mail já cadastrado ou inválido!', HttpStatus.NOT_ACCEPTABLE)
+        if (!cadastroTemporarioMedicoDTO.crm || !matches(cadastroTemporarioMedicoDTO.cpf, /^[0-9]+$/)) {
+            throw new HttpException('Dados inválidos!', HttpStatus.BAD_REQUEST)
+        } else if (!cadastroTemporarioMedicoDTO.email || !cadastroTemporarioMedicoDTO.email.includes("@")) {
+            throw new HttpException('E-mail já cadastrado ou inválido!', HttpStatus.UNPROCESSABLE_ENTITY)
         }
 
         let cadastro: Cadastro = new Cadastro()
         let medico: Medico = new Medico()
 
-        cadastro.email = cadastroTemporarioDTO.email
-        cadastro.nome = cadastroTemporarioDTO.nome
-        cadastro.cpf = cadastroTemporarioDTO.cpf
-        cadastro.sobrenome = cadastroTemporarioDTO.sobrenome
-        cadastro.senha = cadastroTemporarioDTO.senha
+        cadastro.email = cadastroTemporarioMedicoDTO.email
+        cadastro.nome = cadastroTemporarioMedicoDTO.nome
+        cadastro.cpf = cadastroTemporarioMedicoDTO.cpf
+        cadastro.sobrenome = cadastroTemporarioMedicoDTO.sobrenome
+        cadastro.senha = cadastroTemporarioMedicoDTO.senha
 
-        medico.crm = cadastroTemporarioDTO.crm
+        medico.crm = cadastroTemporarioMedicoDTO.crm
 
         let novoCadastro = await this.cadastroRepository.save(cadastro)
 
@@ -47,24 +49,24 @@ export class CadastroService {
         return this.medicoRepository.save(medico)
     }
 
-    async createPaciente(cadastroTemporarioDTO: CadastroTemporarioDTO): Promise<Paciente> {
+    async createPaciente(cadastroTemporarioPacienteDTO: CadastroTemporarioPacienteDTO): Promise<Paciente> {
 
-        if (!Number(cadastroTemporarioDTO.cpf)) {
-            throw new HttpException('CPF inválido!', HttpStatus.NOT_ACCEPTABLE)
-        } else if (!cadastroTemporarioDTO.email || !cadastroTemporarioDTO.email.includes("@")) {
-            throw new HttpException('E-mail já cadastrado!', HttpStatus.NOT_ACCEPTABLE)
+        if (!matches(cadastroTemporarioPacienteDTO.cpf, /^[0-9]+$/)) {
+            throw new HttpException('CPF inválido!', HttpStatus.BAD_REQUEST)
+        } else if (!cadastroTemporarioPacienteDTO.email || !cadastroTemporarioPacienteDTO.email.includes("@")) {
+            throw new HttpException('E-mail já cadastrado!', HttpStatus.UNPROCESSABLE_ENTITY)
         }
 
         let cadastro: Cadastro = new Cadastro()
         let paciente: Paciente = new Paciente()
 
-        cadastro.email = cadastroTemporarioDTO.email
-        cadastro.nome = cadastroTemporarioDTO.nome
-        cadastro.cpf = cadastroTemporarioDTO.cpf
-        cadastro.sobrenome = cadastroTemporarioDTO.sobrenome
-        cadastro.senha = cadastroTemporarioDTO.senha
+        cadastro.email = cadastroTemporarioPacienteDTO.email
+        cadastro.nome = cadastroTemporarioPacienteDTO.nome
+        cadastro.cpf = cadastroTemporarioPacienteDTO.cpf
+        cadastro.sobrenome = cadastroTemporarioPacienteDTO.sobrenome
+        cadastro.senha = cadastroTemporarioPacienteDTO.senha
 
-        paciente.convenio = cadastroTemporarioDTO.convenio
+        paciente.convenio = cadastroTemporarioPacienteDTO.convenio
 
         let novoCadastro = await this.cadastroRepository.save(cadastro)
 
@@ -138,36 +140,36 @@ export class CadastroService {
         let cadastroDeletar = this.findById(id)
 
         if (!cadastroDeletar) {
-            throw new HttpException('Cadastro não encontrado!', HttpStatus.NOT_FOUND)
+            throw new HttpException('Cadastro não encontrado!', HttpStatus.NO_CONTENT)
         }
 
         return this.cadastroRepository.delete(id)
     }
 
-    async updateMedico(cadastroTemporarioDTO: CadastroTemporarioDTO): Promise<Medico> {
+    async updateMedico(cadastroTemporarioMedicoDTO: CadastroTemporarioMedicoDTO): Promise<Medico> {
 
-        let medicoUpdate = await this.findMedicoByCrm(cadastroTemporarioDTO.crm)
+        let medicoUpdate = await this.findMedicoByCrm(cadastroTemporarioMedicoDTO.crm)
 
-        if (!medicoUpdate || !cadastroTemporarioDTO.id) {
+        if (!medicoUpdate || !cadastroTemporarioMedicoDTO.id) {
             throw new HttpException('Médico não encontrado!', HttpStatus.NOT_FOUND)
-        } else if (!Number(cadastroTemporarioDTO.cpf)) {
-            throw new HttpException('CPF inválido!', HttpStatus.NOT_ACCEPTABLE)
-        } else if (!cadastroTemporarioDTO.email || !cadastroTemporarioDTO.email.includes("@")) {
-            throw new HttpException('E-mail já cadastrado!', HttpStatus.NOT_ACCEPTABLE)
+        } else if (!matches(cadastroTemporarioMedicoDTO.cpf, /^[0-9]+$/)) {
+            throw new HttpException('CPF inválido!', HttpStatus.BAD_REQUEST)
+        } else if (!cadastroTemporarioMedicoDTO.email || !cadastroTemporarioMedicoDTO.email.includes("@")) {
+            throw new HttpException('E-mail já cadastrado!', HttpStatus.UNPROCESSABLE_ENTITY)
         }
 
         let cadastro: Cadastro = new Cadastro()
         let medico: Medico = new Medico()
 
         cadastro.id = medicoUpdate.cadastro.id
-        cadastro.email = cadastroTemporarioDTO.email
-        cadastro.nome = cadastroTemporarioDTO.nome
-        cadastro.cpf = cadastroTemporarioDTO.cpf
-        cadastro.sobrenome = cadastroTemporarioDTO.sobrenome
-        cadastro.senha = cadastroTemporarioDTO.senha
+        cadastro.email = cadastroTemporarioMedicoDTO.email
+        cadastro.nome = cadastroTemporarioMedicoDTO.nome
+        cadastro.cpf = cadastroTemporarioMedicoDTO.cpf
+        cadastro.sobrenome = cadastroTemporarioMedicoDTO.sobrenome
+        cadastro.senha = cadastroTemporarioMedicoDTO.senha
 
         medico.id = medicoUpdate.id
-        medico.crm = cadastroTemporarioDTO.crm
+        medico.crm = cadastroTemporarioMedicoDTO.crm
 
         let novoCadastro = await this.cadastroRepository.save(cadastro)
 
@@ -176,30 +178,30 @@ export class CadastroService {
         return this.medicoRepository.save(medico)
     }
 
-    async updatePaciente(cadastroTemporarioDTO: CadastroTemporarioDTO): Promise<Paciente> {
+    async updatePaciente(cadastroTemporarioPacienteDTO: CadastroTemporarioPacienteDTO): Promise<Paciente> {
 
-        const pacienteUpdate = await this.findPacienteById(cadastroTemporarioDTO.id)
+        const pacienteUpdate = await this.findPacienteById(cadastroTemporarioPacienteDTO.id)
 
-        if (!pacienteUpdate || !cadastroTemporarioDTO.id) {
+        if (!pacienteUpdate || !cadastroTemporarioPacienteDTO.id) {
             throw new HttpException('Paciente não encontrado!', HttpStatus.NOT_FOUND)
-        } else if (!Number(cadastroTemporarioDTO.cpf)) {
-            throw new HttpException('CPF inválido!', HttpStatus.NOT_ACCEPTABLE)
-        } else if (!cadastroTemporarioDTO.email || !cadastroTemporarioDTO.email.includes("@")) {
-            throw new HttpException('E-mail já cadastrado!', HttpStatus.NOT_ACCEPTABLE)
+        } else if (!matches(cadastroTemporarioPacienteDTO.cpf, /^[0-9]+$/)) {
+            throw new HttpException('CPF inválido!', HttpStatus.BAD_REQUEST)
+        } else if (!cadastroTemporarioPacienteDTO.email || !cadastroTemporarioPacienteDTO.email.includes("@")) {
+            throw new HttpException('E-mail já cadastrado!', HttpStatus.UNPROCESSABLE_ENTITY)
         }
 
         let cadastro: Cadastro = new Cadastro()
         let paciente: Paciente = new Paciente()
 
         cadastro.id = pacienteUpdate.cadastro.id
-        cadastro.email = cadastroTemporarioDTO.email
-        cadastro.nome = cadastroTemporarioDTO.nome
-        cadastro.cpf = cadastroTemporarioDTO.cpf
-        cadastro.sobrenome = cadastroTemporarioDTO.sobrenome
-        cadastro.senha = cadastroTemporarioDTO.senha
+        cadastro.email = cadastroTemporarioPacienteDTO.email
+        cadastro.nome = cadastroTemporarioPacienteDTO.nome
+        cadastro.cpf = cadastroTemporarioPacienteDTO.cpf
+        cadastro.sobrenome = cadastroTemporarioPacienteDTO.sobrenome
+        cadastro.senha = cadastroTemporarioPacienteDTO.senha
 
-        paciente.id = cadastroTemporarioDTO.id
-        paciente.convenio = cadastroTemporarioDTO.convenio
+        paciente.id = cadastroTemporarioPacienteDTO.id
+        paciente.convenio = cadastroTemporarioPacienteDTO.convenio
 
         const novoCadastro = await this.cadastroRepository.save(cadastro)
 

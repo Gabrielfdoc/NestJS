@@ -1,0 +1,353 @@
+openapi: 3.0.0
+paths:
+  /postagem:
+    get:
+      operationId: PostagemController_findAll
+      parameters: [ ]
+      responses:
+        '200':
+          description: ''
+    post:
+      operationId: PostagemController_create
+      parameters: [ ]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Postagem'
+      responses:
+        '200':
+          description: ''
+    put:
+      operationId: PostagemController_update
+      parameters: [ ]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Postagem'
+      responses:
+        '200':
+          description: ''
+  /postagem/{id}:
+    get:
+      operationId: PostagemController_findById
+      parameters:
+        - name: id
+          required: true
+          in: path
+          schema:
+            type: number
+      responses:
+        '200':
+          description: ''
+    delete:
+      operationId: PostagemController_delete
+      parameters:
+        - name: id
+          required: true
+          in: path
+          schema:
+            type: number
+      responses:
+        '200':
+          description: ''
+  /postagem/busca/{titulo}:
+    get:
+      operationId: PostagemController_findByTitle
+      parameters:
+        - name: titulo
+          required: true
+          in: path
+          schema:
+            type: string
+      responses:
+        '200':
+          description: ''
+  /cadastro/medico:
+    post:
+      operationId: CadastroController_createMedico
+      parameters: [ ]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CadastroTemporarioDTO'
+      responses:
+        '201':
+          description: ''
+    put:
+      operationId: CadastroController_updateMedico
+      parameters: [ ]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CadastroTemporarioDTO'
+      responses:
+        '200':
+          description: ''
+  /cadastro/paciente:
+    post:
+      operationId: CadastroController_createPaciente
+      parameters: [ ]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CadastroTemporarioDTO'
+      responses:
+        '201':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CadastroTemporarioDTOResponse'
+
+    put:
+      operationId: CadastroController_updatePaciente
+      parameters: [ ]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CadastroTemporarioDTO'
+      responses:
+        '200':
+          description: ''
+  /cadastro/{id}:
+    delete:
+      operationId: CadastroController_delete
+      parameters:
+        - name: id
+          required: true
+          in: path
+          schema:
+            type: number
+      responses:
+        '204':
+          description: ''
+  /cadastro:
+    get:
+      operationId: CadastroController_findAll
+      parameters: [ ]
+      responses:
+        '200':
+          description: ''
+  /medico:
+    get:
+      operationId: MedicoController_findAll
+      parameters: [ ]
+      responses:
+        '200':
+          description: ''
+  /medico/{id}:
+    get:
+      operationId: MedicoController_findById
+      parameters:
+        - name: id
+          required: true
+          in: path
+          schema:
+            type: number
+      responses:
+        '200':
+          description: ''
+  /tema:
+    get:
+      operationId: TemaController_findAll
+      parameters: [ ]
+      responses:
+        '200':
+          description: ''
+    post:
+      operationId: TemaController_create
+      parameters: [ ]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Tema'
+      responses:
+        '201':
+          description: ''
+    put:
+      operationId: TemaController_update
+      parameters: [ ]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Tema'
+      responses:
+        '200':
+          description: ''
+  /tema/{id}:
+    get:
+      operationId: TemaController_findById
+      parameters:
+        - name: id
+          required: true
+          in: path
+          schema:
+            type: number
+      responses:
+        '200':
+          description: ''
+    delete:
+      operationId: TemaController_delete
+      parameters:
+        - name: id
+          required: true
+          in: path
+          schema:
+            type: number
+      responses:
+        '204':
+          description: ''
+  /paciente:
+    get:
+      operationId: PacienteController_findAll
+      parameters: [ ]
+      responses:
+        '200':
+          description: ''
+  /paciente/{id}:
+    get:
+      operationId: PacienteController_findById
+      parameters:
+        - name: id
+          required: true
+          in: path
+          schema:
+            type: number
+      responses:
+        '200':
+          description: ''
+  /comentario:
+    get:
+      operationId: ComentarioController_findAll
+      parameters: [ ]
+      responses:
+        '200':
+          description: ''
+    post:
+      operationId: ComentarioController_create
+      parameters: [ ]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Comentario'
+      responses:
+        '201':
+          description: ''
+    put:
+      operationId: ComentarioController_update
+      parameters: [ ]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Comentario'
+      responses:
+        '200':
+          description: ''
+  /comentario/{id}:
+    get:
+      operationId: ComentarioController_findById
+      parameters:
+        - name: id
+          required: true
+          in: path
+          schema:
+            type: number
+      responses:
+        '200':
+          description: ''
+    delete:
+      operationId: ComentarioController_delete
+      parameters:
+        - name: id
+          required: true
+          in: path
+          schema:
+            type: number
+      responses:
+        '204':
+          description: ''
+info:
+  title: DesenvolvMed API
+  description: Backend para o aplicativo DesenvolvMed
+  version: '1.0'
+  contact: { }
+tags:
+  - name: api
+    description: ''
+servers: [ ]
+components:
+  schemas:
+    Postagem:
+      type: object
+      properties: { }
+    CadastroTemporarioDTO:
+      type: object
+      properties:
+        cpf:
+          type: string
+          maxLength: 11
+        nome:
+          type: string
+        sobrenome:
+          type: string
+        senha:
+          type: string
+        email:
+          type: string
+        crm:
+          type: string
+          maxLength: 13
+          required: false
+          description: não deve ser informado para paciente
+        convenio:
+          type: string
+          required: false
+          description: não deve ser informado para médico
+    CadastroTemporarioDTOResponse:
+      type: object
+      properties:
+        cadastro:
+          type: object
+          properties:
+            email:
+              type: string
+            nome:
+              type: string
+            cpf:
+              type: string
+            sobrenome:
+              type: string
+            senha:
+              type: string
+            id:
+              type: number
+        convenio:
+          type: string
+        id:
+          type: number
+    Tema:
+      type: object
+      properties: { }
+    Comentario:
+      type: object
+      properties: { }

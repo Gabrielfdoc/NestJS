@@ -1,6 +1,6 @@
-import { IsNotEmpty, Length, MaxLength, MinLength } from "class-validator";
+import { IsNotEmpty, Length, MaxLength } from "class-validator";
 
-export class CadastroTemporarioDTO {
+export class CadastroTemporarioMedicoDTO {
 
     id: number
 
@@ -26,7 +26,4 @@ export class CadastroTemporarioDTO {
 
     @Length(13)
     crm: string
-
-    @MaxLength(50)
-    convenio: string
 }

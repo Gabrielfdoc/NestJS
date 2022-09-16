@@ -41,5 +41,4 @@ export class ComentarioController {
     delete(@Param('id', ParseIntPipe) id: number): Promise<DeleteResult> {
         return this.service.delete(id)
     }
-
 }
